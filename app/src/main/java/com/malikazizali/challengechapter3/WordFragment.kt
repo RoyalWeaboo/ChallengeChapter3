@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_word.*
 
@@ -29,8 +30,7 @@ class WordFragment : Fragment() {
 
         // toolbar
         back.setOnClickListener {
-            val prevFragment = AlphabetFragment()
-            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragment_container, prevFragment)?.commit()
+            Navigation.findNavController(view).navigate(R.id.action_wordFragment_to_alphabetFragment)
         }
         toolbar_title.text = "Words That Start With $choosenAlph"
 

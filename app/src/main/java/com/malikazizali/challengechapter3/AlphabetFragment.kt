@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_alphabet.*
@@ -21,7 +22,7 @@ class AlphabetFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        alphabet_toolbar.setTitle("Words")
+        alphabet_toolbar.title = "Words"
 
         val alphabet = arrayListOf(
             ListData("A"),
@@ -58,21 +59,16 @@ class AlphabetFragment : Fragment() {
         rv_alphabet.adapter = adapterAlphabet
 
         adapterAlphabet.clicked = {
-            val wordFragment = WordFragment()
+            val choosenAlphabet = Bundle()
+            choosenAlphabet.putSerializable("alphabet", it)
 
-            val bun = Bundle()
-            bun.putSerializable("alphabet",it)
-            wordFragment.arguments = bun
-
-            val mgr = fragmentManager
-            val ft = mgr?.beginTransaction()
-            ft?.replace(R.id.fragment_container, wordFragment)
-            ft?.commit()
+            Navigation.findNavController(view).navigate(R.id.action_alphabetFragment_to_wordFragment,choosenAlphabet)
         }
 
         fun refreshCurrentFragment(){
-            val thisFragment = AlphabetFragment()
-            activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.fragment_container, thisFragment)?.commit()
+            val id = Navigation.findNavController(view).currentDestination?.id
+            Navigation.findNavController(view).popBackStack(id!!,true)
+            Navigation.findNavController(view).navigate(id)
         }
 
         grid.setOnClickListener {
@@ -82,16 +78,10 @@ class AlphabetFragment : Fragment() {
             rv_alphabet.adapter = adapterAlphabet
 
             adapterAlphabet.clicked = {
-                val wordFragment = WordFragment()
+                val choosenAlphabet = Bundle()
+                choosenAlphabet.putSerializable("alphabet", it)
 
-                val bun = Bundle()
-                bun.putSerializable("alphabet",it)
-                wordFragment.arguments = bun
-
-                val mgr = fragmentManager
-                val ft = mgr?.beginTransaction()
-                ft?.replace(R.id.fragment_container, wordFragment)
-                ft?.commit()
+                Navigation.findNavController(view).navigate(R.id.action_alphabetFragment_to_wordFragment,choosenAlphabet)
             }
             grid.setImageResource(R.drawable.ic_baseline_view_linear_24)
 
@@ -100,6 +90,9 @@ class AlphabetFragment : Fragment() {
             }
 
         }
+
     }
+
+
 
 }
